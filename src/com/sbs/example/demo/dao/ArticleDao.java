@@ -150,6 +150,25 @@ public class ArticleDao {
 		return new Article(row);
 	}
 
+	public Article getForPrintArticle(int id) {
+		StringBuilder sb = new StringBuilder();
+
+		sb.append(String.format("SELECT A.*, M.name AS extra__writerName "));
+		sb.append(String.format("FROM `article` AS A "));
+		sb.append(String.format("INNER JOIN `member` AS M "));
+		sb.append(String.format("ON A.memberId = M.id "));
+		sb.append(String.format("WHERE A.id = '%d' ", id));
+
+		String sql = sb.toString();
+		Map<String, Object> row = dbConnection.selectRow(sql);
+
+		if (row.isEmpty()) {
+			return null;
+		}
+
+		return new Article(row);
+	}
+	
 	public List<ArticleReply> getArticleRepliesByArticleId(int articleId) {
 		StringBuilder sb = new StringBuilder();
 
@@ -157,6 +176,26 @@ public class ArticleDao {
 		sb.append(String.format("FROM `articleReply` "));
 		sb.append(String.format("WHERE articleId = '%d' ", articleId));
 		sb.append(String.format("ORDER BY id DESC "));
+
+		List<ArticleReply> articleReplies = new ArrayList<>();
+		List<Map<String, Object>> rows = dbConnection.selectRows(sb.toString());
+
+		for (Map<String, Object> row : rows) {
+			articleReplies.add(new ArticleReply(row));
+		}
+
+		return articleReplies;
+	}
+
+	public List<ArticleReply> getForPrintArticleRepliesByArticleId(int articleId) {
+		StringBuilder sb = new StringBuilder();
+
+		sb.append(String.format("SELECT AR.*, M.name AS extra__writerName "));
+		sb.append(String.format("FROM `articleReply` AS AR "));
+		sb.append(String.format("INNER JOIN `member` AS M "));
+		sb.append(String.format("ON AR.memberId = M.id "));
+		sb.append(String.format("WHERE AR.articleId = '%d' ", articleId));
+		sb.append(String.format("ORDER BY AR.id DESC "));
 
 		List<ArticleReply> articleReplies = new ArrayList<>();
 		List<Map<String, Object>> rows = dbConnection.selectRows(sb.toString());

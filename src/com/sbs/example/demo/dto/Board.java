@@ -15,7 +15,7 @@ public class Board extends Dto {
 	}
 
 	public Board(Map<String, Object> row) {
-		super((int) row.get("id"), (String) row.get("regDate"));
+		super(row);
 		this.code = (String) row.get("code");
 		this.name = (String) row.get("name");
 	}

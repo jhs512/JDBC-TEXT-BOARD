@@ -49,8 +49,8 @@ public class ArticleService {
 
 	public void makeBoardIfNotExists(String name, String code) {
 		Board board = articleDao.getBoardByCode(code);
-		
-		if ( board == null ) {
+
+		if (board == null) {
 			makeBoard(name, code);
 		}
 	}
@@ -63,8 +63,16 @@ public class ArticleService {
 		return articleDao.getArticle(id);
 	}
 
-	public List<ArticleReply> getArticleRepliesByArticleId(int id) {
-		return articleDao.getArticleRepliesByArticleId(id);
+	public Article getForPrintArticle(int id) {
+		return articleDao.getForPrintArticle(id);
+	}
+
+	public List<ArticleReply> getArticleRepliesByArticleId(int articleId) {
+		return articleDao.getArticleRepliesByArticleId(articleId);
+	}
+
+	public List<ArticleReply> getForPrintArticleRepliesByArticleId(int articleId) {
+		return articleDao.getForPrintArticleRepliesByArticleId(articleId);
 	}
 
 }

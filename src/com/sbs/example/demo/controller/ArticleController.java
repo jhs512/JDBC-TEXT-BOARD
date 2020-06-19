@@ -5,18 +5,14 @@ import java.util.List;
 import com.sbs.example.demo.dto.Article;
 import com.sbs.example.demo.dto.ArticleReply;
 import com.sbs.example.demo.dto.Board;
-import com.sbs.example.demo.dto.Member;
 import com.sbs.example.demo.factory.Factory;
 import com.sbs.example.demo.service.ArticleService;
-import com.sbs.example.demo.service.MemberService;
 
 public class ArticleController extends Controller {
 	private ArticleService articleService;
-	private MemberService memberService;
-
+	
 	public ArticleController() {
 		articleService = Factory.getArticleService();
-		memberService = Factory.getMemberService();
 	}
 
 	public void doAction(Request reqeust) {
@@ -42,18 +38,16 @@ public class ArticleController extends Controller {
 			return;
 		}
 
-		Article article = articleService.getArticle(id);
+		Article article = articleService.getForPrintArticle(id);
 
 		if (article == null) {
 			System.out.println("해당 게시물은 존재하지 않습니다.");
 			return;
 		}
 		
-		int writerId = article.getMemberId();
-		Member member = memberService.getMember(writerId);
-		String writerName = member.getName();
+		String writerName = (String)article.getExtra().get("writerName");
 		
-		List<ArticleReply> articleReplies = articleService.getArticleRepliesByArticleId(article.getId());
+		List<ArticleReply> articleReplies = articleService.getForPrintArticleRepliesByArticleId(article.getId());
 		int repliesCount = articleReplies.size();
 		
 		System.out.printf("== %d번 게시물 상세 시작 ==\n", article.getId());
@@ -65,8 +59,7 @@ public class ArticleController extends Controller {
 		System.out.printf("댓글개수 : %d\n", repliesCount);
 		
 		for ( ArticleReply articleReply : articleReplies ) {
-			Member replyWriter = memberService.getMember(articleReply.getMemberId());
-			String replyWriterName = replyWriter.getName();
+			String replyWriterName = (String)articleReply.getExtra().get("writerName");
 			
 			System.out.printf("%d번 댓글 : %s by %s\n", articleReply.getId(), articleReply.getBody(), replyWriterName);
 		}

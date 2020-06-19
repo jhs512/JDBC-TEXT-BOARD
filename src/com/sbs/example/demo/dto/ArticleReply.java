@@ -3,8 +3,6 @@ package com.sbs.example.demo.dto;
 import java.util.Map;
 
 public class ArticleReply extends Dto {
-	private int id;
-	private String regDate;
 	private int articleId;
 	private int memberId;
 	private String body;
@@ -14,7 +12,7 @@ public class ArticleReply extends Dto {
 	}
 
 	public ArticleReply(Map<String, Object> row) {
-		super((int) row.get("id"), (String) row.get("regDate"));
+		super(row);
 		this.body = (String) row.get("body");
 		this.memberId = (int) row.get("memberId");
 		this.articleId = (int) row.get("articleId");
