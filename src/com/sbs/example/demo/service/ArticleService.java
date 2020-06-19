@@ -75,4 +75,8 @@ public class ArticleService {
 		return articleDao.getForPrintArticleRepliesByArticleId(articleId);
 	}
 
+	public List<Article> getForPrintArticlesByBoardCode(String code) {
+		return articleDao.getForPrintArticlesByBoardCode(code);
+	}
+
 }

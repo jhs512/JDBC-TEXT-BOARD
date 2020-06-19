@@ -87,11 +87,12 @@ public class ArticleController extends Controller {
 
 	private void actionList(Request reqeust) {
 		Board currentBoard = Factory.getSession().getCurrentBoard();
-		List<Article> articles = articleService.getArticlesByBoardCode(currentBoard.getCode());
+		List<Article> articles = articleService.getForPrintArticlesByBoardCode(currentBoard.getCode());
 
 		System.out.printf("== %s 게시물 리스트 시작 ==\n", currentBoard.getName());
+		System.out.println("번호 |                날짜 |        작성자 | 제목");
 		for (Article article : articles) {
-			System.out.printf("%d, %s, %s\n", article.getId(), article.getRegDate(), article.getTitle());
+			System.out.printf("%4d | %s | %10s | %s\n", article.getId(), article.getRegDate(), article.getExtra().get("writerName"), article.getTitle());
 		}
 		System.out.printf("== %s 게시물 리스트 끝 ==\n", currentBoard.getName());
 	}

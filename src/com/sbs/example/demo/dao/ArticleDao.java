@@ -207,4 +207,26 @@ public class ArticleDao {
 		return articleReplies;
 	}
 
+	public List<Article> getForPrintArticlesByBoardCode(String code) {
+		StringBuilder sb = new StringBuilder();
+
+		sb.append(String.format("SELECT A.*, M.name AS extra__writerName "));
+		sb.append(String.format("FROM `article` AS A "));
+		sb.append(String.format("INNER JOIN `member` AS M "));
+		sb.append(String.format("ON A.memberId = M.id "));
+		sb.append(String.format("INNER JOIN `board` AS B "));
+		sb.append(String.format("ON A.boardId = B.id "));
+		sb.append(String.format("WHERE B.code = '%s' ", code));
+		sb.append(String.format("ORDER BY A.id DESC "));
+
+		List<Article> articles = new ArrayList<>();
+		List<Map<String, Object>> rows = dbConnection.selectRows(sb.toString());
+
+		for (Map<String, Object> row : rows) {
+			articles.add(new Article(row));
+		}
+
+		return articles;
+	}
+
 }
